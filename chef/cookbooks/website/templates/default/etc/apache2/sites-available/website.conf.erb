@@ -1,0 +1,5 @@
+<VirtualHost *:80>
+    ServerName <%= node[:website][:domain] %>
+    DocumentRoot <%= node[:website][:path] %>/public
+    SetEnv SECRET_KEY_BASE <%= node[:rails][:secret_key_base] %>
+</VirtualHost>

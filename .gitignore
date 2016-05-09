@@ -30,3 +30,7 @@ boxes/*
 /website/.vagrant
 /website/build
 /vagrant-spec.config.rb
+ubuntu-xenial-16.04-cloudimg-console.log
+
+# Chef-zero
+chef/nodes/*.json

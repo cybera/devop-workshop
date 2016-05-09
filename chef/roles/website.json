@@ -1,0 +1,15 @@
+{
+  "name": "website",
+  "chef_type": "role",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+  },
+  "description": "Role for a website server",
+  "run_list": [
+    "recipe[website]"
+  ],
+  "env_run_lists" : {
+   },
+  "override_attributes": {
+  }
+}
