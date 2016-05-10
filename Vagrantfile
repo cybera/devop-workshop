@@ -15,7 +15,9 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
-  config.vm.synced_folder ".", "/var/www/html/website", :group => "www-data"
+  config.vm.synced_folder ".", "/var/www/html/website" do |f| 
+    f.group = "www-data"
+  end
   
   config.vm.provision "chef_zero" do |chef|
     chef.cookbooks_path = "chef/cookbooks"
