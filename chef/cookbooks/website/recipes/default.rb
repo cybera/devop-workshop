@@ -4,6 +4,8 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+execute "apt-get update"
+
 package [ "apache2", 
           "libapache2-mod-passenger", 
           "libxml2-dev",
@@ -12,6 +14,8 @@ package [ "apache2",
           "ruby-full",
           "libsqlite3-dev",
           "ruby-bundler" ]
+
+gem_package 'bundler'
 
 template "/etc/apache2/sites-available/website.conf" do
   source 'etc/apache2/sites-available/website.conf.erb'
@@ -25,7 +29,15 @@ service "apache2"
 apache_site "website"
 apache_module "passenger"
 
+directory node[:website][:path] do
+  owner "ubuntu"
+  group "ubuntu"
+  mode "0755"
+  action :create
+end
+
 execute "bundle install" do
   cwd node[:website][:path]
   not_if "bundle check"
 end
+
