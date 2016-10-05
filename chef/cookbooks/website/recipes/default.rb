@@ -6,6 +6,8 @@
 
 execute "apt-get update"
 
+include_recipe "lsyncd"
+
 package [ "apache2", 
           "libapache2-mod-passenger", 
           "libxml2-dev",
@@ -13,6 +15,7 @@ package [ "apache2",
           "zlib1g-dev",
           "ruby-full",
           "libsqlite3-dev",
+          "libpq-dev",
           "ruby-bundler" ]
 
 gem_package 'bundler'

@@ -1,0 +1,11 @@
+settings {
+    logfile    = "/var/log/lsyncd.log"
+}
+
+local confdir = '/etc/lsyncd/conf.d/'
+local entries = readdir( confdir )
+for name, isdir in pairs( entries ) do
+    if not isdir then
+        dofile( confdir .. name )
+    end
+end

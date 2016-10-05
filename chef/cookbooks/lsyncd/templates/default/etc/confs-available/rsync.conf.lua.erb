@@ -1,0 +1,14 @@
+sync {
+    default.rsync,
+    source="<%= @options[:source] %>",
+    targetdir="<%= @options[:targetdir] %>",
+    delay=0,
+    excludeFrom="/etc/lsyncd/exclude.conf",
+    rsync = {
+        archive = true,
+        compress = true,
+        owner = true,
+        perms = true,
+        group = true
+    }
+}
