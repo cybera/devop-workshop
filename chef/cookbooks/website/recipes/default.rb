@@ -8,7 +8,8 @@ execute "apt-get update"
 
 include_recipe "lsyncd"
 
-package [ "apache2", 
+package [ "git",
+          "apache2", 
           "libapache2-mod-passenger", 
           "libxml2-dev",
           "build-essential",
@@ -37,6 +38,12 @@ directory node[:website][:path] do
   group "ubuntu"
   mode "0755"
   action :create
+end
+
+git node[:website][:path] do
+  repository "https://github.com/cybera/devop-workshop.git"
+  reference "master"
+  action :sync
 end
 
 execute "bundle install" do
