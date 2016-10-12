@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+import sys
+import subprocess
+
+
+def show_disk():
+    disk_cmds=('df -h',
+           'lsblk -io KNAME,TYPE,SIZE,MODEL',)
+
+
+    for dc in disk_cmds:
+        ssh_cmd('{0}'.format(dc))
+
+
+def ssh_cmd(shell_cmd):
+
+    print("{0}\n----------------------".format(shell_cmd))
+
+    print subprocess.check_output(
+        "ssh idp.dev.myunified.ca -l ubuntu {0}".format(shell_cmd),
+        stderr=subprocess.STDOUT,
+        shell=True)
+
+def main():
+    if len(sys.argv) > 1:
+        sys.exit(1)
+
+    show_disk()
+
+if __name__ == "__main__":
+	main()
