@@ -3,12 +3,12 @@ import sys
 import subprocess
 
 
-def show_logs():
+def show_logs(cmd):
     log_files=('/var/log/apache2/access.log',
-           '/var/log/apache2/access.log')
+           '/var/log/apache2/error.log')
 
     for lf in log_files:
-        ssh_cmd('cat {0}'.format(lf))
+        ssh_cmd('tail -n 50 {0}'.format(lf))
 
 def apache_ctl(cmd):
 
