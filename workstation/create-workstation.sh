@@ -93,3 +93,19 @@ chef-zero --host \${IP} --daemon
 EOF
 sudo chmod +x /usr/local/bin/run-chef-zero
 
+
+# simple utility to de-emphasise our use of Chef.  We
+# don't want Chef to be the focus of this workshop
+sudo tee /usr/local/bin/chef-upload > /dev/null << EOF
+CHEF="/home/ubuntu/devop-workshop/chef"
+
+for c in \$(ls \$CHEF/cookbooks); do 
+knife cookbook upload $c; 
+done
+
+for r in \$(find \$CHEF/roles -name *.json); do
+    knife role from file $r;
+done
+EOF
+sudo chmod +x /usr/local/bin/chef-upload
+
