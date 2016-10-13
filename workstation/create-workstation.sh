@@ -45,11 +45,12 @@ cache_type "BasicFile"
 cache_options :path => "#{chef_repo}/chef/checksums"
 knife[:ssh_identity_file] = "#{ENV['HOME']}/.ssh/id_rsa"
 knife[:openstack_ssh_key_id] = "workshop" 
-knife[:bootstrap_network] = "private" 
+knife[:network] =  false
 knife[:ssh_user] = "ubuntu"
 knife[:flavor] = "m1.tiny"
 knife[:editor] = "vi"
 knife[:image] = "Ubuntu 16.04"
+knife[:server_create_timeout] = 15
 knife[:openstack_auth_url] = "#{ENV['OS_AUTH_URL']}/tokens"
 knife[:openstack_password] = ENV['OS_PASSWORD']
 knife[:openstack_tenant] = ENV['OS_TENANT_NAME']
