@@ -110,3 +110,39 @@ done
 EOF
 sudo chmod +x /usr/local/bin/chef-upload
 
+
+# write a check the workstation has been configured by the user
+# Notice this creates a python script.  There's no reason for this
+# other to demonstrate that you don't have to use a single
+# scripting language for everything you do.
+sudo tee /usr/local/bin/check_workshop_config > /dev/null << EOF
+#! /usr/bin/env python
+
+import os.path
+
+credentials = '/home/ubuntu/.credentials/openrc.sh'
+key = '/home/ubuntu/.ssh/id_rsa'
+
+# check cloud credentials exists and is not just an empty file
+if not os.path.isfile(credentials) or 'OS_AUTH_URL' not in open(credentials).read():
+  print "\nHmmm... I can't find your cloud credentials, or maybe it's just empty."
+  print "You should copy them to '%s'\n" % (credentials)
+
+# check the default ssh identity file exists and has correct mode
+if not os.path.isfile(key):
+  print "\nHey, it looks like you haven't set up your default ssh identity file."
+  print "You can either copy an existing RSA pem key to '%s', or create a new one:" % (key)
+  print "\n    ssh-keygen -N '' -f ~/.ssh/id_rsa \n"
+else:
+  mode = oct(os.stat(key).st_mode & 0777)
+  if mode != "0400":
+    print "\nWhups, you should change the mode of your default ssh key:"
+    print "\n    chmod 400 ~/.ssh/id_rsa \n"
+EOF
+sudo chmod +x /usr/local/bin/check_workshop_config
+
+# call our configuration check upon login
+cat << EOF >> ~/.profile
+check_workshop_config
+EOF
+
