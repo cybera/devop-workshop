@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 sudo apt-get update
+sudo apt-get install -y git
 
 # install the chef development kit
 wget -P /tmp https://packages.chef.io/stable/ubuntu/12.04/chefdk_0.18.26-1_amd64.deb
 sudo dpkg -i /tmp/chefdk_0.18.26-1_amd64.deb 
 
 # install chef-zero server
-sudo apt-get install -y chef-zero
+sudo apt-get install --reinstall -y chef-zero
 
 # install the openstack command line client
 sudo apt-get install -y python-novaclient
@@ -19,11 +20,12 @@ cd /tmp
 git clone https://github.com/opscode/knife-openstack.git
 cd knife-openstack
 gem build knife-openstack.gemspec
-chef gem install knife-openstack/knife-openstack*.gem --no-ri --no-rdoc
+GEM=$(find /tmp -name '*.gem')
+chef gem install $GEM --no-ri --no-rdoc
 
 # some useful directories
-mkdir ~/.chef
-mkdir ~/.credentials
+mkdir -p ~/.chef
+mkdir -p ~/.credentials
 
 # create an empty cloud credentials file.  This will be replaced by
 # the users actual credential file
