@@ -44,3 +44,8 @@ devops http start
 devops http reload
 devops http status
 ```
+
+### View server catalog
+```
+devops server-catalog 
+```
