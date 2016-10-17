@@ -39,7 +39,7 @@ echo "bash /usr/local/bin/run-chef-zero" >> ~/.bashrc
 # notice we're using the same identity file for both chef and openstack
 cat << EOF > ~/.chef/knife.rb
 chef_repo = File.join(File.dirname(__FILE__), "..")
-cookbook_path "#{chef_repo}/chef/cookbooks"
+cookbook_path [ '~/devop-workshop/chef/cookbooks/']
 chef_server_url "http://<IP_ADDRESS>:8889" 
 node_name "workshop"
 client_key "#{ENV['HOME']}/.ssh/id_rsa"
