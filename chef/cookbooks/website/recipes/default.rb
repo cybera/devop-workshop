@@ -43,6 +43,8 @@ end
 git node[:website][:path] do
   repository "https://github.com/cybera/devop-workshop.git"
   reference "master"
+  user "ubuntu"
+  group "ubuntu"
   action :sync
 end
 
