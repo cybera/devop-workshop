@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 sudo apt-get update
-sudo apt-get install -y git
+sudo apt-get install -y git python-pip
 
 # install the chef development kit
 wget -P /tmp https://packages.chef.io/stable/ubuntu/12.04/chefdk_0.18.26-1_amd64.deb
@@ -10,10 +10,12 @@ sudo dpkg -i /tmp/chefdk_0.18.26-1_amd64.deb
 # install chef-zero server
 sudo apt-get install --reinstall -y chef-zero
 
-# install the openstack command line client
-sudo apt-get install -y python-novaclient
 # these are needed to build the nokogiri gem, used by the knife-openstack gem
 sudo apt-get install -y build-essential ruby-dev zlib1g-dev
+
+# Install openstackclient via pip since ubuntu version is outdated
+pip install --upgrade --force pbr
+pip install requests[security] python-openstackclient
 
 # build and install the knife-openstack gem
 cd /tmp
