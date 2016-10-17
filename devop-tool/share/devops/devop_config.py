@@ -38,11 +38,18 @@ def devop_args():
     return parser
 
 
-def ssh_cmd(shell_cmd, role=None):
+def ssh_cmd(shell_cmd, role=None, host=None):
 
     print("{0}\n----------------------".format(shell_cmd))
 
-    if role is None:
+    if host == 'local':
+        # Local command
+        print subprocess.check_output(
+            '{cmd}'.format(cmd=shell_cmd),
+            stderr=subprocess.STDOUT,
+            shell=True)
+
+    elif role is None:
         print subprocess.check_output(
             'knife ssh "role:website" -a ipaddress "{cmd}"'.format(cmd=shell_cmd),
             stderr=subprocess.STDOUT,
