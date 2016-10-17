@@ -21,3 +21,26 @@ The demonstration web site can then be created as:
     
     ubuntu@workshop:~$ knife openstack server create --node-name website --run-list "role[website]"
 
+
+
+## Devop-Tool commands
+
+### View logs
+```
+devops logs http
+devops logs system
+```
+
+### Test http service
+```
+devops http test
+```
+
+### Control http service
+```
+devops http restart
+devops http stop
+devops http start
+devops http reload
+devops http status
+```
