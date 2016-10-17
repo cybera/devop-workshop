@@ -103,11 +103,11 @@ sudo tee /usr/local/bin/chef-upload > /dev/null << EOF
 CHEF="/home/ubuntu/devop-workshop/chef"
 
 for c in \$(ls \$CHEF/cookbooks); do 
-knife cookbook upload $c; 
+knife cookbook upload \$c;
 done
 
 for r in \$(find \$CHEF/roles -name *.json); do
-    knife role from file $r;
+    knife role from file \$r;
 done
 EOF
 sudo chmod +x /usr/local/bin/chef-upload
