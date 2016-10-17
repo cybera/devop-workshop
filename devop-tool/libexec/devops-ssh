@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nova ssh --address-type fixed --login ubuntu "$1"
