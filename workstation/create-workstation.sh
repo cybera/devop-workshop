@@ -148,3 +148,5 @@ cat << EOF >> ~/.profile
 check_workshop_config
 EOF
 
+# setup devop-tool
+echo 'eval "$($HOME/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bash_profile
