@@ -49,3 +49,8 @@ devops http status
 ```
 devops server-catalog 
 ```
+
+### SSH via instance name
+```
+devops ssh website
+```
