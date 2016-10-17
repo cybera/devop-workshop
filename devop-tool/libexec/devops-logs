@@ -26,25 +26,19 @@ def system_logs(role=None):
 
 
 def main():
-    (options, args) = devop_config.devop_args().parse_args()
-
-    if len(sys.argv) < 1:
-        print("Not enough arguments")
-        sys.exit(1)
-
     switcher = {
         'http': http_logs,
         'system' : system_logs,
 
     }
 
-    if sys.argv[1] not in switcher.keys():
-        print("command not valid")
-        sys.exit(1)
+    parser = devop_config.devop_args()
+    parser.add_argument('command', choices=switcher.keys())
+    args = parser.parse_args()
 
-    func = switcher.get(sys.argv[1].strip(), lambda: "nothing")
+    func = switcher.get(args.command, lambda: "nothing")
+    func(role=args.role)
 
-    func(role=options.role)
 
 if __name__ == "__main__":
 	main()

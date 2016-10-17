@@ -3,7 +3,7 @@
 import ConfigParser
 from os.path import expanduser
 import subprocess
-from optparse import OptionParser
+import argparse
 
 def config():
     cfg_fname = ".devop.cfg"
@@ -30,9 +30,9 @@ def config():
     return config
 
 def devop_args():
-    parser = OptionParser()
+    parser = argparse.ArgumentParser()
 
-    parser.add_option("-r", "--role", dest="role",
+    parser.add_argument("-r", "--role", dest="role",
                       help="role for knife", metavar="ROLE")
 
     return parser

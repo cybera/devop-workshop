@@ -29,15 +29,6 @@ def test(role=None):
     devop_config.ssh_cmd('curl http://localhost:80', role=role)
 
 def main():
-    (options, args) = devop_config.devop_args().parse_args()
-
-
-    if len(sys.argv) == 2:
-        pass
-    elif len(sys.argv) < 2:
-        print("Not enough arguments")
-        sys.exit(1)
-
     switcher = {
         'start': apache_start,
         'stop' : apache_stop,
@@ -48,13 +39,12 @@ def main():
 
     }
 
-    if sys.argv[1] not in switcher.keys():
-        print("command not valid")
-        sys.exit(1)
+    parser = devop_config.devop_args()
+    parser.add_argument('command', choices=switcher.keys())
+    args = parser.parse_args()
 
-    func = switcher.get(sys.argv[1].strip(), lambda: "nothing")
-
-    func(role=options.role)
+    func = switcher.get(args.command, lambda: "nothing")
+    func(role=args.role)
 
 if __name__ == "__main__":
 	main()
