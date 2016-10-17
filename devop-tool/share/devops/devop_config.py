@@ -2,6 +2,8 @@
 
 import ConfigParser
 from os.path import expanduser
+import subprocess
+from optparse import OptionParser
 
 def config():
     cfg_fname = ".devop.cfg"
@@ -26,3 +28,28 @@ def config():
             config.write(configfile)
 
     return config
+
+def devop_args():
+    parser = OptionParser()
+
+    parser.add_option("-r", "--role", dest="role",
+                      help="role for knife", metavar="ROLE")
+
+    return parser
+
+
+def ssh_cmd(shell_cmd, role=None):
+
+    print("{0}\n----------------------".format(shell_cmd))
+
+    if role is None:
+        print subprocess.check_output(
+            'knife ssh "role:website" -a ipaddress "{cmd}"'.format(cmd=shell_cmd),
+            stderr=subprocess.STDOUT,
+            shell=True)
+    else:
+        print subprocess.check_output(
+            'knife ssh "role:{role}" -a ipaddress "{cmd}"'.format(role=role,cmd=shell_cmd),
+            stderr=subprocess.STDOUT,
+            shell=True)
+

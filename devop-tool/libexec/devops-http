@@ -9,47 +9,32 @@ import devop_config
 
 CONFIG = devop_config.config()
 
-def show_logs():
-    log_files=('/var/log/apache2/access.log',
-           '/var/log/apache2/error.log')
+def apache_start(role=None):
+    devop_config.ssh_cmd('sudo service apache2 start',role=role)
 
-    for lf in log_files:
-        ssh_cmd('tail -n 50 {0}'.format(lf))
+def apache_stop(role=None):
+    devop_config.ssh_cmd('sudo service apache2 stop', role=role)
 
-def apache_start():
-    ssh_cmd('sudo service apache2 start')
+def apache_restart(role=None):
+    devop_config.ssh_cmd('sudo service apache2 restart', role=role)
 
-def apache_stop():
-    ssh_cmd('sudo service apache2 stop')
+def apache_reload(role=None):
+    devop_config.ssh_cmd('sudo service apache2 reload', role=role)
 
-def apache_restart():
-    ssh_cmd('sudo service apache2 restart')
-
-def apache_reload():
-    ssh_cmd('sudo service apache2 reload')
+def apache_status(role=None):
+    devop_config.ssh_cmd('/etc/init.d/apache2 status', role=role)
 
 
-def test():
-    ssh_cmd('curl http://localhost:80')
-
-def ssh_cmd(shell_cmd):
-
-    print("{0}\n----------------------".format(shell_cmd))
-    host = CONFIG.get('server','host')
-    print("got host {}".format(host))
-    if host != 'localhost':
-        print subprocess.check_output(
-            "ssh {host} -l ubuntu {cmd}".format(host=host,cmd=shell_cmd),
-            stderr=subprocess.STDOUT,
-            shell=True)
-    else:
-        print subprocess.check_output(
-            "{cmd}".format(cmd=shell_cmd),
-            stderr=subprocess.STDOUT,
-            shell=True)
+def test(role=None):
+    devop_config.ssh_cmd('curl http://localhost:80', role=role)
 
 def main():
-    if len(sys.argv) < 2:
+    (options, args) = devop_config.devop_args().parse_args()
+
+
+    if len(sys.argv) == 2:
+        pass
+    elif len(sys.argv) < 2:
         print("Not enough arguments")
         sys.exit(1)
 
@@ -58,7 +43,7 @@ def main():
         'stop' : apache_stop,
         'restart': apache_restart,
         'reload':apache_reload,
-        'logs' : show_logs,
+        'status': apache_status,
         'test' : test,
 
     }
@@ -69,7 +54,7 @@ def main():
 
     func = switcher.get(sys.argv[1].strip(), lambda: "nothing")
 
-    func()
+    func(role=options.role)
 
 if __name__ == "__main__":
 	main()
