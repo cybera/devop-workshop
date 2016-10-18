@@ -16,13 +16,13 @@ def key_new():
     devop_config.ssh_cmd('ssh-keygen -N "" -f {}/.ssh/id_rsa'.format(HOME), host='local')
 
 def key_upload():
-    devop_config.ssh_cmd('nova keypair-add --pub-key ~/.ssh/id_rsa.pub workshop', host='local')
+    devop_config.ssh_cmd('nova keypair-add --pub-key {}/.ssh/id_rsa.pub workshop'.format(HOME), host='local')
 
 def key_list():
     devop_config.ssh_cmd('nova keypair-list', host='local')
 
 def key_replace():
-    devop_config.ssh_cmd('nova keypair-delete workshop; nova keypair-add --pub-key ~/.ssh/id_rsa.pub workshop', host='local')
+    devop_config.ssh_cmd('nova keypair-delete workshop; nova keypair-add --pub-key {}/.ssh/id_rsa.pub workshop'.format(HOME), host='local')
 
 def main():
     switcher = {
