@@ -17,7 +17,7 @@ sudo apt-get install -y build-essential ruby-dev zlib1g-dev
 sudo apt-get install -y python-dev libffi-dev libssl-dev
 
 # Install openstackclient via pip since ubuntu version is outdated
-sudo pip install pbr requests[security] python-openstackclient
+sudo pip install pbr jinja2 requests[security] python-openstackclient
 
 # Workaround for pycparser issue: https://github.com/pyca/cryptography/issues/3187
 sudo pip install --upgrade pip
