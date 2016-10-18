@@ -22,7 +22,7 @@ def main():
     if args.role is not None:
         role=args.role
     else:
-        role=CONFIG.get('defaults','role')<Paste>
+        role=CONFIG.get('defaults','role')
 
     show_disk(role)
 
