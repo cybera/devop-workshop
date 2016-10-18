@@ -1,0 +1,106 @@
+#!/usr/bin/env python
+import sys
+import os
+import subprocess
+
+pylib_dir = os.environ['_DEVOPS_ROOT'] + "/share/devops/"
+sys.path.insert(0, pylib_dir)
+import devop_config
+from jinja2 import Template
+from subprocess import check_call
+import shlex
+
+CONFIG = devop_config.config()
+
+HAPROXY_TMPL = """
+    global
+            log /dev/log    local0
+            log /dev/log    local1 notice
+            chroot /var/lib/haproxy
+            stats socket /run/haproxy/admin.sock mode 660 level admin
+            stats timeout 30s
+            user haproxy
+            group haproxy
+            daemon
+
+    defaults
+            log     global
+            mode    http
+            option  httplog
+            option  dontlognull
+            timeout connect 5000
+            timeout client  50000
+            timeout server  50000
+            errorfile 400 /etc/haproxy/errors/400.http
+            errorfile 403 /etc/haproxy/errors/403.http
+            errorfile 408 /etc/haproxy/errors/408.http
+            errorfile 500 /etc/haproxy/errors/500.http
+            errorfile 502 /etc/haproxy/errors/502.http
+            errorfile 503 /etc/haproxy/errors/503.http
+            errorfile 504 /etc/haproxy/errors/504.http
+
+    frontend http
+        bind 0.0.0.0:80
+        default_backend website
+
+    backend website
+        balance roundrobin
+        server website {{ website_ip }} check port 80
+    """
+
+def haproxy_start():
+    devop_config.ssh_cmd('sudo service haproxy start',role=role)
+
+def haproxy_stop():
+    devop_config.ssh_cmd('sudo service haproxy stop', role=role)
+
+def haproxy_restart():
+    devop_config.ssh_cmd('sudo service haproxy restart', role=role)
+
+def haproxy_reload():
+    devop_config.ssh_cmd('sudo service haproxy reload', role=role)
+
+def haproxy_status():
+    devop_config.ssh_cmd('/etc/init.d/haproxy status', role=role)
+
+def haproxy_config():
+    command = "knife node show website -a ipaddress | sed -n -e 's/^.*ipaddress: //p'"
+
+    addr check_call(shlex.split(command), stderr=subprocess.STDOUT)
+
+    try:
+        socket.inet_aton(addr)
+        # legal
+    except socket.error:
+        # Not legal
+        print("invalid IP address from knife")
+
+def test(role=None):
+    devop_config.ssh_cmd('curl http://localhost:80', role=role)
+
+def main():
+    switcher = {
+        'start': haproxy_start,
+        'stop' : haproxy_stop,
+        'restart': haproxy_restart,
+        'reload':haproxy_reload,
+        'status': haproxy_status,
+        'config': haproxy_config,
+        'test' : test,
+
+    }
+
+    parser = devop_config.devop_args()
+    parser.add_argument('command', choices=switcher.keys())
+    args = parser.parse_args()
+
+    if args.role is not None:
+        role=args.role
+    else:
+        role=CONFIG.get('defaults','role')
+
+    func = switcher.get(args.command, lambda: "nothing")
+    func(role=role)
+
+if __name__ == "__main__":
+	main()
