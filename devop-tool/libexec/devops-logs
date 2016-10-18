@@ -36,8 +36,14 @@ def main():
     parser.add_argument('command', choices=switcher.keys())
     args = parser.parse_args()
 
+    if args.role is not None:
+        role=args.role
+    else:
+        role=CONFIG.get('defaults','role')
+
     func = switcher.get(args.command, lambda: "nothing")
-    func(role=args.role)
+    func(role=role)
+
 
 
 if __name__ == "__main__":

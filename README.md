@@ -25,6 +25,14 @@ The demonstration web site can then be created as:
 
 ## Devop-Tool commands
 
+### Configuration
+
+~/.devops.cfg (automatically created on first run)
+```
+[defaults]
+role = website
+```
+
 ### View logs
 ```
 devops logs http
