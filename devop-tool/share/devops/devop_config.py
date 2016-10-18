@@ -40,8 +40,6 @@ def devop_args():
 
 def ssh_cmd(shell_cmd, role=None, host=None):
 
-    print("{0}\n----------------------".format(shell_cmd))
-
     if host == 'local':
         # Local command
         command = '{cmd}'.format(cmd=shell_cmd)
@@ -49,7 +47,10 @@ def ssh_cmd(shell_cmd, role=None, host=None):
         # default to website role if none specified
         command = 'knife ssh "role:website" -a ipaddress "{cmd}"'.format(cmd=shell_cmd)
     else:
-        command = 'knife ssh "role:{role}" -a ipaddress "{cmd}"'.format(role=role,cmd=shell_cmd),
+        # role specific command
+        command = 'knife ssh "role:{role}" -a ipaddress "{cmd}"'.format(role=role,cmd=shell_cmd)
+
+    print("{}\n----------------------".format(command))
 
     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
 
