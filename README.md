@@ -44,18 +44,26 @@ devops logs http
 devops logs system
 ```
 
-### Test http service
-```
-devops http test
-```
-
-### Control http service
+### Manage (remote) http service
 ```
 devops http restart
 devops http stop
 devops http start
 devops http reload
 devops http status
+devops http test
+```
+
+### Manage (local) haproxy service
+```
+devops haproxy install
+devops haproxy config
+devops haproxy restart
+devops haproxy stop
+devops haproxy start
+devops haproxy reload
+devops haproxy status
+devops haproxy test
 ```
 
 ### View server catalog
