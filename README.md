@@ -4,21 +4,21 @@ This project demonstrates the use of some 'devops' pracitces to create a trivial
 
 ## Getting Started
 
-This demonstration requires 
+This demonstration requires
  * An OpenStack account, with access to object storage, and a keypair named 'workshop'
  * A Chef server
  * A Chef workstation, with the knife openstack plugin
 
 For convenience, the 'create-workstation.sh' script will provision an Ubuntu linux server as a Chef workstation, along with the chef-zero server.  After running the script on your server, complete the user configuration by:
  * copying your openstack cloud credentials to /home/ubuntu/.credentials/openrc.sh
- * creating your default ssh identity by copying your 'workshop' openstack ssh keypair to /home/ubuntu/.ssh/id_rsa. 
+ * creating your default ssh identity by copying your 'workshop' openstack ssh keypair to /home/ubuntu/.ssh/id_rsa.
 
 The workstation includes a utility script to upload chef roles and recipes to the chef server:
 
     ubuntu@workshop:~$ chef-upload
 
 The demonstration web site can then be created as:
-    
+
     ubuntu@workshop:~$ knife openstack server create --node-name website --run-list "role[website]"
 
 
@@ -31,6 +31,11 @@ The demonstration web site can then be created as:
 ```
 [defaults]
 role = website
+```
+
+### Create website
+```
+devops create website
 ```
 
 ### View logs
@@ -55,10 +60,18 @@ devops http status
 
 ### View server catalog
 ```
-devops server-catalog 
+devops server-catalog
 ```
 
-### SSH via instance name
+### SSH via nova instance name (or ID)
 ```
 devops ssh website
+```
+
+### Manage nova SSH keys
+```
+devops key new
+devops key list
+devops key upload
+devops key replace
 ```
