@@ -7,76 +7,57 @@ pylib_dir = os.environ['_DEVOPS_ROOT'] + "/share/devops/"
 sys.path.insert(0, pylib_dir)
 import devop_config
 from jinja2 import Template
-from subprocess import check_call
+import subprocess
+import socket
 import shlex
+import re
 
 CONFIG = devop_config.config()
 
-HAPROXY_TMPL = """
-    global
-            log /dev/log    local0
-            log /dev/log    local1 notice
-            chroot /var/lib/haproxy
-            stats socket /run/haproxy/admin.sock mode 660 level admin
-            stats timeout 30s
-            user haproxy
-            group haproxy
-            daemon
-
-    defaults
-            log     global
-            mode    http
-            option  httplog
-            option  dontlognull
-            timeout connect 5000
-            timeout client  50000
-            timeout server  50000
-            errorfile 400 /etc/haproxy/errors/400.http
-            errorfile 403 /etc/haproxy/errors/403.http
-            errorfile 408 /etc/haproxy/errors/408.http
-            errorfile 500 /etc/haproxy/errors/500.http
-            errorfile 502 /etc/haproxy/errors/502.http
-            errorfile 503 /etc/haproxy/errors/503.http
-            errorfile 504 /etc/haproxy/errors/504.http
-
-    frontend http
-        bind 0.0.0.0:80
-        default_backend website
-
-    backend website
-        balance roundrobin
-        server website {{ website_ip }} check port 80
-    """
+def haproxy_install():
+    devop_config.ssh_cmd('sudo add-apt-repository -y ppa:vbernat/haproxy-1.6', host='local')
+    devop_config.ssh_cmd('sudo apt-get update', host='local')
+    devop_config.ssh_cmd('sudo apt-get install -y haproxy', host='local')
 
 def haproxy_start():
-    devop_config.ssh_cmd('sudo service haproxy start',role=role)
+    devop_config.ssh_cmd('sudo service haproxy start', host='local')
 
 def haproxy_stop():
-    devop_config.ssh_cmd('sudo service haproxy stop', role=role)
+    devop_config.ssh_cmd('sudo service haproxy stop', host='local')
 
 def haproxy_restart():
-    devop_config.ssh_cmd('sudo service haproxy restart', role=role)
+    devop_config.ssh_cmd('sudo service haproxy restart', host='local')
 
 def haproxy_reload():
-    devop_config.ssh_cmd('sudo service haproxy reload', role=role)
+    devop_config.ssh_cmd('sudo service haproxy reload', host='local')
 
 def haproxy_status():
-    devop_config.ssh_cmd('/etc/init.d/haproxy status', role=role)
+    devop_config.ssh_cmd('/etc/init.d/haproxy status', host='local')
 
 def haproxy_config():
-    command = "knife node show website -a ipaddress | sed -n -e 's/^.*ipaddress: //p'"
+    # Get IP address from knife command
+    command = "knife node show website -a ipaddress"
 
-    addr check_call(shlex.split(command), stderr=subprocess.STDOUT)
+    out = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE).communicate()[0]
+
+    m = re.search('(?<=\sipaddress:\s).*', out)
+    website_ip = m.group(0)
 
     try:
-        socket.inet_aton(addr)
+        socket.inet_aton(website_ip)
         # legal
     except socket.error:
         # Not legal
         print("invalid IP address from knife")
+        sys.exit(1)
 
-def test(role=None):
-    devop_config.ssh_cmd('curl http://localhost:80', role=role)
+    # write template
+    i_file = pylib_dir + "haproxy.cfg.tpl"
+    o_file = '/etc/haproxy/haproxy.cfg'
+    devop_config.ssh_cmd('sudo sed -i -e "s/<WEBSITE_IP>/\{website_ip}/" {i_file} > {o_file}'.format(website_ip=website_ip, i_file=i_file, o_file=o_file), host='local')
+
+def test():
+    devop_config.ssh_cmd('curl http://localhost:80', host='local')
 
 def main():
     switcher = {
@@ -87,7 +68,6 @@ def main():
         'status': haproxy_status,
         'config': haproxy_config,
         'test' : test,
-
     }
 
     parser = devop_config.devop_args()
