@@ -3,6 +3,7 @@
 import ConfigParser
 from os.path import expanduser
 import subprocess
+import shlex
 import argparse
 
 def config():
@@ -43,19 +44,22 @@ def ssh_cmd(shell_cmd, role=None, host=None):
 
     if host == 'local':
         # Local command
-        print subprocess.check_output(
-            '{cmd}'.format(cmd=shell_cmd),
-            stderr=subprocess.STDOUT,
-            shell=True)
-
+        command = '{cmd}'.format(cmd=shell_cmd)
     elif role is None:
-        print subprocess.check_output(
-            'knife ssh "role:website" -a ipaddress "{cmd}"'.format(cmd=shell_cmd),
-            stderr=subprocess.STDOUT,
-            shell=True)
+        # default to website role if none specified
+        command = 'knife ssh "role:website" -a ipaddress "{cmd}"'.format(cmd=shell_cmd)
     else:
-        print subprocess.check_output(
-            'knife ssh "role:{role}" -a ipaddress "{cmd}"'.format(role=role,cmd=shell_cmd),
-            stderr=subprocess.STDOUT,
-            shell=True)
+        command = 'knife ssh "role:{role}" -a ipaddress "{cmd}"'.format(role=role,cmd=shell_cmd),
+
+    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
+        if output:
+            print output.strip()
+
+    rc = process.poll()
+
 
