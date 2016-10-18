@@ -7,11 +7,13 @@ pylib_dir = os.environ['_DEVOPS_ROOT'] + "/share/devops/"
 sys.path.insert(0, pylib_dir)
 import devop_config
 import argparse
+from os.path import expanduser
 
+HOME = expanduser("~")
 CONFIG = devop_config.config()
 
 def key_new():
-    devop_config.ssh_cmd('ssh-keygen -N "" -f ~/.ssh/id_rsa', host='local')
+    devop_config.ssh_cmd('ssh-keygen -N "" -f {}/.ssh/id_rsa'.format(HOME), host='local')
 
 def key_upload():
     devop_config.ssh_cmd('nova keypair-add --pub-key ~/.ssh/id_rsa.pub workshop', host='local')
