@@ -13,9 +13,11 @@ sudo apt-get install --reinstall -y chef-zero
 # these are needed to build the nokogiri gem, used by the knife-openstack gem
 sudo apt-get install -y build-essential ruby-dev zlib1g-dev
 
+# Needed for building python packages
+sudo apt-get install -y python-dev libffi-dev libssl-dev
+
 # Install openstackclient via pip since ubuntu version is outdated
-pip install --upgrade --force pbr
-pip install requests[security] python-openstackclient
+sudo pip install pbr requests[security] python-openstackclient
 
 # build and install the knife-openstack gem
 cd /tmp
@@ -155,4 +157,4 @@ cd
 git clone https://github.com/cybera/devop-workshop.git
 
 # setup devop-tool from devop-workshop repository
-echo 'eval "$($HOME/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bash_profile
+echo 'eval "$($HOME/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bashrc
