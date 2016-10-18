@@ -54,7 +54,10 @@ def haproxy_config():
     # write template
     i_file = pylib_dir + "haproxy.cfg.tpl"
     o_file = '/etc/haproxy/haproxy.cfg'
-    devop_config.ssh_cmd('sudo sed -i -e "s/<WEBSITE_IP>/\{website_ip}/" {i_file} > {o_file}'.format(website_ip=website_ip, i_file=i_file, o_file=o_file), host='local')
+    devop_config.ssh_cmd('sudo cp {} {}'.format(i_file, o_file), host='local')
+    devop_config.ssh_cmd('sudo sed -i "s/<WEBSITE_IP>/{}/" {}'.format(website_ip, o_file), host='local')
+
+    haproxy_reload()
 
 def test():
     devop_config.ssh_cmd('curl http://localhost:80', host='local')
@@ -80,7 +83,7 @@ def main():
         role=CONFIG.get('defaults','role')
 
     func = switcher.get(args.command, lambda: "nothing")
-    func(role=role)
+    func()
 
 if __name__ == "__main__":
 	main()
