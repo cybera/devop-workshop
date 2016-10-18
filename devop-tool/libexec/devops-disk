@@ -17,6 +17,7 @@ def show_disk(role=None):
         devop_config.ssh_cmd('{}'.format(dc), role=role)
 
 def main():
+    parser = devop_config.devop_args()
     args = parser.parse_args()
 
     if args.role is not None:
