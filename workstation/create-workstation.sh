@@ -19,6 +19,9 @@ sudo apt-get install -y python-dev libffi-dev libssl-dev
 # Install openstackclient via pip since ubuntu version is outdated
 sudo pip install pbr requests[security] python-openstackclient
 
+# Workaround for pycparser issue: https://github.com/pyca/cryptography/issues/3187
+sudo pip install git+https://github.com/eliben/pycparser@release_v2.14
+
 # build and install the knife-openstack gem
 cd /tmp
 git clone https://github.com/opscode/knife-openstack.git
@@ -153,8 +156,8 @@ check_workshop_config
 EOF
 
 # git clone devop-workshop repository
-cd
+cd /home/ubuntu
 git clone https://github.com/cybera/devop-workshop.git
 
 # setup devop-tool from devop-workshop repository
-echo 'eval "$($HOME/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bashrc
+echo 'eval "$(/home/ubuntu/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bashrc
