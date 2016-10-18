@@ -20,6 +20,7 @@ sudo apt-get install -y python-dev libffi-dev libssl-dev
 sudo pip install pbr requests[security] python-openstackclient
 
 # Workaround for pycparser issue: https://github.com/pyca/cryptography/issues/3187
+sudo pip install --upgrade pip
 sudo pip install git+https://github.com/eliben/pycparser@release_v2.14
 
 # build and install the knife-openstack gem
