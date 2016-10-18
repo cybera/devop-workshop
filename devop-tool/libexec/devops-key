@@ -22,7 +22,8 @@ def key_list():
     devop_config.ssh_cmd('nova keypair-list', host='local')
 
 def key_replace():
-    devop_config.ssh_cmd('nova keypair-delete workshop; nova keypair-add --pub-key {}/.ssh/id_rsa.pub workshop'.format(HOME), host='local')
+    devop_config.ssh_cmd('nova keypair-delete workshop'.format(HOME), host='local')
+    key_upload()
 
 def main():
     switcher = {
