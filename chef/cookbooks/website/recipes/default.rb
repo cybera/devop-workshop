@@ -41,7 +41,7 @@ directory node[:website][:path] do
 end
 
 git node[:website][:path] do
-  repository "https://github.com/cybera/devop-workshop.git"
+  repository "https://github.com/agentdate/minimal-rails.git"
   reference "master"
   user "ubuntu"
   group "ubuntu"
