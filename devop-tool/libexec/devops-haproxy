@@ -70,6 +70,7 @@ def main():
         'reload':haproxy_reload,
         'status': haproxy_status,
         'config': haproxy_config,
+        'install': haproxy_install,
         'test' : test,
     }
 
