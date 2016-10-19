@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# Usage: devops logs [-h] [-r ROLE] {http,system}
+# Summary: View logs on remote system
+
 import sys
 import os
 import subprocess

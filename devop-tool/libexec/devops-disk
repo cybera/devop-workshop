@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Usage: devops disk [-h] [-r ROLE]
+# Summary: Check disk details for specific roles
 import sys
 import os
 import subprocess

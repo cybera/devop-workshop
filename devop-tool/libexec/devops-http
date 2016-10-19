@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Usage: devops http [-h] [-r ROLE] {status,reload,stop,start,test,restart}
+# Summary: Manage remote http server
 import sys
 import os
 import subprocess

@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Usage: devops create [-h] [-r ROLE] {website}
+# Summary: Create website
 import sys
 import os
 import subprocess

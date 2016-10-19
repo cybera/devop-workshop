@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Usage: devops server-catalog
+# Summary: View list of nova and chef servers
+# optional arguments:
+#   -h, --help  show this help message and exit
+
 import sys
 import os
 import subprocess
