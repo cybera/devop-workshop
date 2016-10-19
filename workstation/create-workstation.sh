@@ -160,9 +160,5 @@ EOF
 cd /home/ubuntu
 git clone https://github.com/cybera/devop-workshop.git
 
-# Populate chef
-/usr/local/bin/run-chef-zero
-/usr/local/bin/chef-upload
-
 # setup devop-tool from devop-workshop repository
 echo 'eval "$(/home/ubuntu/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bashrc
