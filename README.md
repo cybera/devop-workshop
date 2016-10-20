@@ -1,5 +1,5 @@
 # DevOp Workshop
-This project demonstrates the use of some 'devops' pracitces to create a trivial web site, a drive mirroring service, system monitoring, and a command line tool for managing the system.
+This project demonstrates the use of some 'devops' practices to create a trivial web site, a drive mirroring service, system monitoring, and a command line tool for managing the system.
 
 
 ## Getting Started
