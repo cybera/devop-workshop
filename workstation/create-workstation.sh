@@ -47,17 +47,17 @@ echo "bash /usr/local/bin/run-chef-zero" >> ~/.bashrc
 # notice we're using the same identity file for both chef and openstack
 cat << EOF > ~/.chef/knife.rb
 chef_repo = File.join(File.dirname(__FILE__), "..")
-cookbook_path [ '~/devop-workshop/chef/cookbooks/']
+cookbook_path ["#{chef_repo}/devop-workshop/chef/cookbooks"]
 chef_server_url "http://<IP_ADDRESS>:8889" 
 node_name "workshop"
 client_key "#{ENV['HOME']}/.ssh/id_rsa"
 cache_type "BasicFile"
-cache_options :path => "#{chef_repo}/chef/checksums"
+cache_options :path => "#{chef_repo}/.chef/checksums"
 knife[:ssh_identity_file] = "#{ENV['HOME']}/.ssh/id_rsa"
 knife[:openstack_ssh_key_id] = "workshop" 
 knife[:network] =  false
 knife[:ssh_user] = "ubuntu"
-knife[:flavor] = "m1.tiny"
+knife[:flavor] = "m1.large"
 knife[:editor] = "vi"
 knife[:image] = "Ubuntu 16.04"
 knife[:server_create_timeout] = 15
@@ -98,7 +98,7 @@ sudo chmod +x /usr/local/bin/add-identity
 
 # write a little script to configure and start chef-zero
 sudo tee /usr/local/bin/run-chef-zero > /dev/null << EOF
-IP=\$(ifconfig | grep 10.2 | awk '/inet addr/{print substr(\$2,6)}')
+IP=\$(ifconfig | grep 'inet addr:10.' | awk '/inet addr/{print substr(\$2,6)}')
 sed -i "s/<IP_ADDRESS>/\${IP}/" .chef/knife.rb 
 chef-zero --host \${IP} --daemon 
 EOF
