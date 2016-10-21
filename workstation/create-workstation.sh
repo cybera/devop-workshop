@@ -110,9 +110,7 @@ sudo chmod +x /usr/local/bin/run-chef-zero
 sudo tee /usr/local/bin/chef-upload > /dev/null << EOF
 CHEF="/home/ubuntu/devop-workshop/chef"
 
-for c in \$(ls \$CHEF/cookbooks); do 
-knife cookbook upload \$c;
-done
+knife cookbook upload -a
 
 for r in \$(find \$CHEF/roles -name *.json); do
     knife role from file \$r;
