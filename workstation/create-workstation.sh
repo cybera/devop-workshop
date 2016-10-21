@@ -159,6 +159,8 @@ EOF
 # git clone devop-workshop repository
 cd /home/ubuntu
 git clone https://github.com/cybera/devop-workshop.git
+cd /home/ubuntu/devop-workshop
+git checkout start
 
 # setup devop-tool from devop-workshop repository
 echo 'eval "$(/home/ubuntu/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bashrc
