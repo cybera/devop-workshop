@@ -3,4 +3,3 @@
 # Summary: ssh to an openstack instance
 # Help: host must be what's listed under in "devops server-catalog" under nova section
 
-nova ssh --address-type fixed --login ubuntu "$1"
