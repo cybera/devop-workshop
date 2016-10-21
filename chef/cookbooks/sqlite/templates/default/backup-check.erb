@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ "$(find /backups/ -cmin +-0 -name \*db3\*)" == "" ]; then
+  exit 1
+fi
+exit 0
+

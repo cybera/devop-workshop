@@ -60,6 +60,13 @@ template "#{node[:db][:utils]}/sqlite_backup" do
 end
 
 
+# write backup check
+template "#{node[:db][:utils]}/check-db-backup" do
+  source "backup-check.erb"
+  mode 0755
+end
+
+
 # create cron task to call backup
 cron "backup sqlite database" do
   hour "*"

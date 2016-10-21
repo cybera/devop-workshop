@@ -21,4 +21,17 @@ sensu_check "website" do
   interval 5
 end
 
+sensu_handler "db-backups" do
+  type "pipe"
+  command "echo $(date) -- Hourly database backup not found >> /tmp/sensu.log"
+  severities ["warning"]
+end
+
+sensu_check "check-recent-db-backup" do
+  command "check-db-backup"
+  handlers ["db-backups"]
+  subscribers ["website"]
+  interval 5
+end
+
 include_recipe 'sensu::client_service'
