@@ -16,7 +16,7 @@ CONFIG = devop_config.config()
 
 def transfer_key(role=None):
     source = '/home/ubuntu/.ssh/id_rsa'
-    destination = '~'
+    destination = '/home/ubuntu/.ssh'
     command = "knife node show %s -a ipaddress" % role
     out = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE).communicate()[0]
     m = re.search('(?<=\sipaddress:\s).*', out)
