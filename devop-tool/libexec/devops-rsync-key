@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+# Usage: devops disk [-h] [-r ROLE]
+# Summary: Check disk details for specific roles
+import re
+import shlex
+import sys
+import os
+import subprocess
+
+pylib_dir = os.environ['_DEVOPS_ROOT'] + "/share/devops/"
+sys.path.insert(0, pylib_dir)
+import devop_config
+
+CONFIG = devop_config.config()
+
+
+def transfer_key(role=None):
+    source = '/home/ubuntu/.ssh/id_rsa'
+    destination = '~'
+    command = "knife node show %s -a ipaddress" % role
+    out = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE).communicate()[0]
+    m = re.search('(?<=\sipaddress:\s).*', out)
+    website_ip = m.group(0)
+
+    delete_key = "ssh -q %s 'rm -f %s/*.pem'" % (website_ip,destination)
+    install_key = "scp -q %s %s:%s/rsync.pem" % (source, website_ip, destination)
+    for command in [delete_key, install_key]:
+        out = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE).communicate()[0]
+
+
+def main():
+    parser = devop_config.devop_args()
+    args = parser.parse_args()
+
+    if args.role is not None:
+        role=args.role
+    else:
+        role=CONFIG.get('defaults','role')
+
+    transfer_key(role)
+
+if __name__ == "__main__":
+        main()
