@@ -6,7 +6,8 @@
   },
   "description": "Role for a website server",
   "run_list": [
-    "recipe[website]"
+    "recipe[website::default]",
+    "recipe[website::monitoring]"
   ],
   "env_run_lists" : {
    },
