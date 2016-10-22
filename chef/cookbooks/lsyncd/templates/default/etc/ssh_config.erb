@@ -58,3 +58,5 @@ Host workshop
         HostName <%= node[:lsyncd][:host]%>
         User ubuntu
         IdentityFile <%= node[:lsyncd][:identity_file]%>
+        StrictHostKeyChecking no
+        UserKnownHostsFile=/dev/null
