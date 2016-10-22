@@ -110,9 +110,7 @@ sudo chmod +x /usr/local/bin/run-chef-zero
 sudo tee /usr/local/bin/chef-upload > /dev/null << EOF
 CHEF="/home/ubuntu/devop-workshop/chef"
 
-for c in \$(ls \$CHEF/cookbooks); do 
-knife cookbook upload \$c;
-done
+knife cookbook upload -a
 
 for r in \$(find \$CHEF/roles -name *.json); do
     knife role from file \$r;
@@ -159,6 +157,8 @@ EOF
 # git clone devop-workshop repository
 cd /home/ubuntu
 git clone https://github.com/cybera/devop-workshop.git
+cd /home/ubuntu/devop-workshop
+git checkout start
 
 # setup devop-tool from devop-workshop repository
 echo 'eval "$(/home/ubuntu/devop-workshop/devop-tool/bin/devops init -)"' >> ~/.bashrc
