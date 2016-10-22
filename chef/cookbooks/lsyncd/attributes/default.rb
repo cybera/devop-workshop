@@ -7,10 +7,21 @@ default[:lsyncd][:exclude] = {
     "**/*.tmp" => true
 }
 
+default[:lsyncd][:source] = "#{ENV['HOME']}/rsync-source"
+default[:lsyncd][:destination] = "#{ENV['HOME']}/rsync-destination"
+
 default[:lsyncd][:rsync] = {
-    "rysnc" => {
+    "rsync" => {
+        :enabled => false,
+        :source => node[:lsyncd][:source],
+        :target => node[:lsyncd][:destination]
+    },
+    "rsyncssh" =>{
         :enabled => true,
-        :source => "/tmp/foo",
-        :target => "/tmp/bar"
+        :source => node[:lsyncd][:source],
+        :target => node[:lsyncd][:destination],
+        :host => "workshop"
     }
 }
+
+default[:lsyncd][:identity_file] = "#{ENV['HOME']}/.ssh/rsync.pem"

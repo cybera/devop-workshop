@@ -1,7 +1,8 @@
 sync {
-    default.rsync,
+    default.rsyncssh,
     source="<%= @options[:source] %>",
-    targetdir="<%= @options[:targetdir] %>",
+    host="<%= @options[:host] %>",
+    targetdir="<%= @options[:target] %>",
     delay=0,
     excludeFrom="/etc/lsyncd/exclude.conf",
     rsync = {

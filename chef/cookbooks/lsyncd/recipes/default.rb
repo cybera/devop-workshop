@@ -4,6 +4,34 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+ruby_block "something" do
+    block do
+        Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
+        command = 'grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" /etc/chef/client.rb'
+        command_out = shell_out(command)
+        node.default['lsyncd']['host'] = command_out.stdout.strip
+    end
+    action :create
+end
+
+template '/etc/ssh/ssh_config' do
+  source 'etc/ssh_config.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  action :create
+end
+
+ruby_block "ensure node can resolve API FQDN" do
+  block do
+    fe = Chef::Util::FileEdit.new("/etc/hosts")
+    fe.insert_line_if_no_match(/#{node['lsyncd']['host']}/,
+                               "#{node['lsyncd']['host']} workshop")
+    fe.write_file
+  end
+end
+
+
 service 'lsyncd' do
   action :nothing
 end
@@ -44,7 +72,7 @@ template '/etc/lsyncd/lsyncd.conf.lua' do
 end
 
 template '/etc/lsyncd/exclude.conf' do
-  source 'etc/lsyncd/exclude.conf.erb'
+  source "etc/lsyncd/exclude.conf.erb"
   owner 'root'
   group 'root'
   mode '0644'
@@ -53,9 +81,9 @@ template '/etc/lsyncd/exclude.conf' do
 end
 
 node[:lsyncd][:rsync].each do |key,options|
-    template "/etc/lsyncd/confs-available/rsync-#{key}.conf.lua" do
-        source 'etc/lsyncd/confs-available/rsync.conf.lua.erb'
-        owner 'root'
+    template "/etc/lsyncd/confs-available/#{key}.conf.lua" do
+        source "etc/lsyncd/confs-available/#{key}.conf.lua.erb"
+    owner 'root'
         group 'root'
         variables(
             :options => options
@@ -65,8 +93,8 @@ node[:lsyncd][:rsync].each do |key,options|
         notifies :restart, resources(:service => "lsyncd") if options[:enabled]
     end
 
-    link "/etc/lsyncd/conf.d/rsync-#{key}.conf.lua" do
-      to "/etc/lsyncd/confs-available/rsync-#{key}.conf.lua"
+    link "/etc/lsyncd/conf.d/#{key}.conf.lua" do
+      to "/etc/lsyncd/confs-available/#{key}.conf.lua"
       link_type :symbolic
       notifies :restart, resources(:service => "lsyncd")
       only_if { options[:enabled] }
