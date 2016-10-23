@@ -7,8 +7,8 @@ default[:lsyncd][:exclude] = {
     "**/*.tmp" => true
 }
 
-default[:lsyncd][:source] = "#{ENV['HOME']}/rsync-source"
-default[:lsyncd][:destination] = "#{ENV['HOME']}/rsync-destination"
+default[:lsyncd][:source] = "/home/ubuntu/rsync-source"
+default[:lsyncd][:destination] = "/home/ubuntu/rsync-destination"
 
 default[:lsyncd][:rsync] = {
     "rsync" => {
@@ -24,4 +24,4 @@ default[:lsyncd][:rsync] = {
     }
 }
 
-default[:lsyncd][:identity_file] = "#{ENV['HOME']}/.ssh/rsync.pem"
+default[:lsyncd][:identity_file] = "/home/ubuntu/.ssh/rsync.pem"

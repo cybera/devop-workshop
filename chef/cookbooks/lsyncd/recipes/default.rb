@@ -32,6 +32,13 @@ ruby_block "ensure node can resolve API FQDN" do
 end
 
 
+directory node[:lsyncd][:source] do
+  owner 'ubuntu'
+  group 'ubuntu'
+  mode '0755'
+  action :create
+end
+
 service 'lsyncd' do
   action :nothing
 end
