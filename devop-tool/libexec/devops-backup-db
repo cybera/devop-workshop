@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+# Usage: devops disk [-h] [-r ROLE]
+# Summary: Backup the database on the webserver
+
+import sys
+import os
+import subprocess
+
+pylib_dir = os.environ['_DEVOPS_ROOT'] + "/share/devops/"
+sys.path.insert(0, pylib_dir)
+import devop_config
+
+CONFIG = devop_config.config()
+
+
+def run_backup(role=None):
+    disk_cmds=('',)
+    for dc in disk_cmds:
+        devop_config.ssh_cmd('{}'.format(dc), role=role)
+
+
+def main():
+    parser = devop_config.devop_args()
+    args = parser.parse_args()
+
+    if args.role is not None:
+        role=args.role
+    else:
+        role=CONFIG.get('defaults','role')
+
+    run_backup(role)
+
+if __name__ == "__main__":
+	main()
+
