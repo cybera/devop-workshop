@@ -38,7 +38,7 @@ end
 
 # call creation script
 execute 'create database' do
-  command "sqlite3 coffee.db3 < #{node[:db][:data]}/coffee.sql"
+  command "sqlite3 #{node[:db][:data]}/coffee.db3 < #{node[:db][:data]}/coffee.sql"
   not_if { File.exist?("#{node[:db][:data]}/coffee.db3")}
 end
 
