@@ -4,6 +4,13 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+directory node[:lsyncd][:source] do
+  owner 'ubuntu'
+  group 'ubuntu'
+  mode '0755'
+  action :create
+end
+
 service 'lsyncd' do
   action :nothing
 end
