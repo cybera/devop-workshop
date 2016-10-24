@@ -7,10 +7,13 @@ default[:lsyncd][:exclude] = {
     "**/*.tmp" => true
 }
 
+default[:lsyncd][:source] = "/home/ubuntu/rsync-source"
+default[:lsyncd][:destination] = "/home/ubuntu/rsync-destination"
+
 default[:lsyncd][:rsync] = {
     "rysnc" => {
         :enabled => true,
-        :source => "/tmp/foo",
-        :target => "/tmp/bar"
+        :source => node[:lsyncd][:source],
+        :target => node[:lsyncd][:destination]
     }
 }

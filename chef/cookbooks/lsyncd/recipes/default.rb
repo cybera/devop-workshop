@@ -53,7 +53,7 @@ template '/etc/lsyncd/exclude.conf' do
 end
 
 node[:lsyncd][:rsync].each do |key,options|
-    template "/etc/lsyncd/confs-available/rsync-#{key}.conf.lua" do
+    template "/etc/lsyncd/confs-available/#{key}.conf.lua" do
         source 'etc/lsyncd/confs-available/rsync.conf.lua.erb'
         owner 'root'
         group 'root'
@@ -65,8 +65,8 @@ node[:lsyncd][:rsync].each do |key,options|
         notifies :restart, resources(:service => "lsyncd") if options[:enabled]
     end
 
-    link "/etc/lsyncd/conf.d/rsync-#{key}.conf.lua" do
-      to "/etc/lsyncd/confs-available/rsync-#{key}.conf.lua"
+    link "/etc/lsyncd/conf.d/#{key}.conf.lua" do
+      to "/etc/lsyncd/confs-available/#{key}.conf.lua"
       link_type :symbolic
       notifies :restart, resources(:service => "lsyncd")
       only_if { options[:enabled] }
