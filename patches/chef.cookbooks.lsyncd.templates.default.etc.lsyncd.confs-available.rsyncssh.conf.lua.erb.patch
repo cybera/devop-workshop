@@ -1,0 +1,21 @@
+diff --git a/chef/cookbooks/lsyncd/templates/default/etc/lsyncd/confs-available/rsyncssh.conf.lua.erb b/chef/cookbooks/lsyncd/templates/default/etc/lsyncd/confs-available/rsyncssh.conf.lua.erb
+new file mode 100644
+index 0000000..1295147
+--- /dev/null
++++ b/chef/cookbooks/lsyncd/templates/default/etc/lsyncd/confs-available/rsyncssh.conf.lua.erb
+@@ -0,0 +1,15 @@
++sync {
++    default.rsyncssh,
++    source="<%= @options[:source] %>",
++    host="<%= @options[:host] %>",
++    targetdir="<%= @options[:target] %>",
++    delay=0,
++    excludeFrom="/etc/lsyncd/exclude.conf",
++    rsync = {
++        archive = true,
++        compress = true,
++        owner = true,
++        perms = true,
++        group = true
++    }
++}

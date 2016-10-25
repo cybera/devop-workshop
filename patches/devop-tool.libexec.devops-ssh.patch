@@ -1,0 +1,9 @@
+diff --git a/devop-tool/libexec/devops-ssh b/devop-tool/libexec/devops-ssh
+index 764b45f..05d2cc1 100755
+--- a/devop-tool/libexec/devops-ssh
++++ b/devop-tool/libexec/devops-ssh
+@@ -3,3 +3,4 @@
+ # Summary: ssh to an openstack instance
+ # Help: host must be what's listed under in "devops server-catalog" under nova section
+ 
++nova ssh --address-type fixed --login ubuntu "$1"

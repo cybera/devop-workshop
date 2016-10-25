@@ -1,0 +1,22 @@
+diff --git a/chef/cookbooks/website/recipes/monitoring.rb b/chef/cookbooks/website/recipes/monitoring.rb
+index e02c725..5edc8b7 100644
+--- a/chef/cookbooks/website/recipes/monitoring.rb
++++ b/chef/cookbooks/website/recipes/monitoring.rb
+@@ -21,4 +21,17 @@ sensu_check "website" do
+   interval 5
+ end
+ 
++sensu_handler "db-backups" do
++  type "pipe"
++  command "echo $(date) -- Hourly database backup not found >> /tmp/sensu.log"
++  severities ["warning"]
++end
++
++sensu_check "check-recent-db-backup" do
++  command "check-db-backup"
++  handlers ["db-backups"]
++  subscribers ["website"]
++  interval 5
++end
++
+ include_recipe 'sensu::client_service'

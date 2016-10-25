@@ -1,0 +1,10 @@
+diff --git a/chef/cookbooks/sqlite/attributes/default.rb b/chef/cookbooks/sqlite/attributes/default.rb
+new file mode 100644
+index 0000000..7f0b369
+--- /dev/null
++++ b/chef/cookbooks/sqlite/attributes/default.rb
+@@ -0,0 +1,4 @@
++default[:db][:backups] = '/backups'
++default[:db][:utils] = '/usr/local/bin' 
++default[:db][:data] = '/usr/local/etc/sqlite3'
++default[:db][:logs] = '/var/log/sqlite'

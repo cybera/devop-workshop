@@ -1,0 +1,23 @@
+diff --git a/chef/cookbooks/website/recipes/monitoring.rb b/chef/cookbooks/website/recipes/monitoring.rb
+index 01259ef..e02c725 100644
+--- a/chef/cookbooks/website/recipes/monitoring.rb
++++ b/chef/cookbooks/website/recipes/monitoring.rb
+@@ -8,7 +8,17 @@ sensu_client "localhost" do
+   subscriptions ["website"]
+ end
+ 
++sensu_handler "log" do
++  type "pipe"
++  command "echo $(date) -- Website is down >> /tmp/sensu.log"
++  severities ["unknown", "warning", "critical"]
++end
+ 
++sensu_check "website" do
++  command "curl localhost"
++  handlers ["log"]
++  subscribers ["website"]
++  interval 5
++end
+ 
+ include_recipe 'sensu::client_service'
+-

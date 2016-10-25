@@ -1,0 +1,39 @@
+diff --git a/chef/cookbooks/lsyncd/recipes/default.rb b/chef/cookbooks/lsyncd/recipes/default.rb
+index 5e916fe..82f3f32 100644
+--- a/chef/cookbooks/lsyncd/recipes/default.rb
++++ b/chef/cookbooks/lsyncd/recipes/default.rb
+@@ -4,6 +4,34 @@
+ #
+ # Copyright (c) 2016 The Authors, All Rights Reserved.
+ 
++ruby_block "something" do
++    block do
++        Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)
++        command = 'grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" /etc/chef/client.rb'
++        command_out = shell_out(command)
++        node.default['lsyncd']['host'] = command_out.stdout.strip
++    end
++    action :create
++end
++
++template '/etc/ssh/ssh_config' do
++  source 'etc/ssh_config.erb'
++  owner 'root'
++  group 'root'
++  mode '0644'
++  action :create
++end
++
++ruby_block "ensure node can resolve API FQDN" do
++  block do
++    fe = Chef::Util::FileEdit.new("/etc/hosts")
++    fe.insert_line_if_no_match(/#{node['lsyncd']['host']}/,
++                               "#{node['lsyncd']['host']} workshop")
++    fe.write_file
++  end
++end
++
++
+ directory node[:lsyncd][:source] do
+   owner 'ubuntu'
+   group 'ubuntu'

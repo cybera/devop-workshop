@@ -1,0 +1,27 @@
+diff --git a/devop-tool/libexec/devops-backup-db b/devop-tool/libexec/devops-backup-db
+index cc24b9b..80c5081 100755
+--- a/devop-tool/libexec/devops-backup-db
++++ b/devop-tool/libexec/devops-backup-db
+@@ -1,7 +1,6 @@
+ #!/usr/bin/env python
+ # Usage: devops disk [-h] [-r ROLE]
+-# Summary: Backup the database on the webserver
+-
++# Summary: Check disk details for specific roles
+ import sys
+ import os
+ import subprocess
+@@ -14,7 +13,7 @@ CONFIG = devop_config.config()
+ 
+ 
+ def run_backup(role=None):
+-    disk_cmds=('',)
++    disk_cmds=('sudo /usr/local/bin/sqlite_backup /usr/local/etc/sqlite3/coffee.db3 /backups',)
+     for dc in disk_cmds:
+         devop_config.ssh_cmd('{}'.format(dc), role=role)
+ 
+@@ -32,4 +31,3 @@ def main():
+ 
+ if __name__ == "__main__":
+ 	main()
+-

@@ -1,0 +1,14 @@
+diff --git a/chef/roles/website.json b/chef/roles/website.json
+index dc30284..1996943 100644
+--- a/chef/roles/website.json
++++ b/chef/roles/website.json
+@@ -7,7 +7,8 @@
+   "description": "Role for a website server",
+   "run_list": [
+     "recipe[website::default]",
+-    "recipe[website::monitoring]"
++    "recipe[website::monitoring]",
++    "recipe[sqlite]"
+   ],
+   "env_run_lists" : {
+    },

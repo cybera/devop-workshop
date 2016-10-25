@@ -1,0 +1,13 @@
+diff --git a/chef/cookbooks/sqlite/templates/default/backup-check.erb b/chef/cookbooks/sqlite/templates/default/backup-check.erb
+new file mode 100644
+index 0000000..5e36e45
+--- /dev/null
++++ b/chef/cookbooks/sqlite/templates/default/backup-check.erb
+@@ -0,0 +1,7 @@
++#!/usr/bin/env bash
++
++if [ "$(find /backups/ -cmin -60 -name \*db3\*)" == "" ]; then
++  exit 1
++fi
++exit 0
++
